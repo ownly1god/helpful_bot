@@ -50,6 +50,17 @@ async def bot_command(ctx):
     
     await ctx.send(f'!bot_command completed')
 
+@client.command()
+async def clear(ctx, amount=15):
+    channel = ctx.message.channel
+    messages = []
+    async for message in channel.history(limit=amount + 1):
+              messages.append(message)
+    
+    print(f'{client.user} has performed !clear action')
+    await channel.delete_messages(messages)
+    await ctx.send(f'{amount} messages have been purged by {ctx.message.author.mention}')
+
 
 
 
