@@ -80,6 +80,17 @@ async def make_channel(ctx, channel_name=None, category_name=None):
         await guild.create_text_channel(channel_name, category=category_name)
         await ctx.send(f'Channel <{channel_name}> created!')
 
+@client.command()
+async def clear(ctx, amount=15):
+    channel = ctx.message.channel
+    messages = []
+    async for message in channel.history(limit=amount + 1):
+              messages.append(message)
+    
+    print(f'{client.user} has performed !clear action')
+    await channel.delete_messages(messages)
+    await ctx.send(f'{amount} messages have been purged by {ctx.message.author.mention}')
+
 
 
 client.run(TOKEN)
