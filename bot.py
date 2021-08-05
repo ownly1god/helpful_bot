@@ -58,26 +58,37 @@ async def make_channel(ctx, channel_name=None, category_name=None):
     if not channel_name:
         await ctx.send(f'No channel name provided.')
         return
+    else:
+        clean_name = channel_name.replace('-',' ')
+        channel_name = ' '.join(clean_name.split())
+        channel_name = channel_name.lower().replace(' ','-')
 
-    channel_name = channel_name.replace(' ','-')
-    guild = ctx.guild
+    
     if category_name:
-        existing_category = utils.get(guild.categories, name = category_name)
+        category = category_name.upper()
+
+    guild = ctx.guild
+    if category:
+        all_categories = guild.categories
+        for cat in all_categories:
+            if category == cat.name.upper():
+                existing_category = cat
+
         # Create category if none exists
         if not existing_category:
-            await guild.create_category(category_name)
-            category_name = utils.get(guild.categories, name = category_name)
+            await guild.create_category(category)
+            
         else:
-            category_name = existing_category
+            category = existing_category
     else:
         # Otherwise add channel to the current category
-        category_name = ctx.message.channel.category
+        category = ctx.message.channel.category
 
-    channel = utils.get(category_name.channels, name = channel_name)
+    channel = utils.get(category.channels, name = channel_name)
     if channel:
         await ctx.send(f'Channel <{channel_name}> already exists')
     else:
-        await guild.create_text_channel(channel_name, category=category_name)
+        await guild.create_text_channel(channel_name, category=category)
         await ctx.send(f'Channel <{channel_name}> created!')
 
 @client.command()
