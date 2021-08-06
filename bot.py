@@ -1,5 +1,6 @@
 import discord
 import os
+import comic_tracker
 from dotenv import load_dotenv
 from discord.ext import commands
 from discord import utils
@@ -101,6 +102,22 @@ async def clear(ctx, amount=15):
     print(f'{client.user} has performed !clear action')
     await channel.delete_messages(messages)
     await ctx.send(f'{amount} messages have been purged by {ctx.message.author.mention}')
+
+
+''' Track Comic '''
+@client.command()
+async def track_comic(ctx, url):
+    channel = ctx.message.channel
+
+    print(f'{client.user} !track-comic running\n')
+    # ct = comic_tracker.ComicTracker(url)
+    
+    if name is None:
+        await ctx.send(f'Comic link cannot be tracked. Elements not found. {ctx.message.author.mention}')
+    elif tracked:
+        await ctx.send(f'{name} Being tracked. {ctx.message.author.mention}')
+    else:
+        await ctx.send(f'{name} Already tracked. {ctx.message.author.mention}')
 
 
 
